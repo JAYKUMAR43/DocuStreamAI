@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 // Handcrafted default mock logs to populate the recent logs feed beautifully
 const MOCK_HISTORIC_LOGS = [
   {
@@ -171,7 +173,7 @@ export default function App() {
       triggerToast("Data successfully routed and secured in Direct Local Export (.json)!");
     } else {
       // Route via backend destination engine
-      fetch("http://localhost:8000/api/route-destination", {
+      fetch(`${API_URL}/api/route-destination`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -442,7 +444,7 @@ export default function App() {
         formData.append("file", fileObject);
         formData.append("destination", selectedDestination);
         
-        fetch("http://localhost:8000/api/ingest-file", {
+        fetch(`${API_URL}/api/ingest-file`, {
           method: "POST",
           body: formData
         })
@@ -465,7 +467,7 @@ export default function App() {
       } else {
         // Fallback: Call local FastAPI backend if text-based
         if (format !== 'PDF_DOCUMENT' && format !== 'IMAGE_SCREENSHOT' && format !== 'WORD_DOCUMENT') {
-          fetch("http://localhost:8000/api/ingest", {
+          fetch(`${API_URL}/api/ingest`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
